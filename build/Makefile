@@ -536,9 +536,9 @@ ifeq (${FLASH_SIZE_SHRINK},y)
 	${Q}printf 'remove unneeded files'
 	${Q}${BUILD_PATH}/boards/${CHIP_ARCH_L}/${PROJECT_FULLNAME}/rootfs_script/clean_rootfs.sh $(ROOTFS_DIR)
 endif
-	${Q}find $(ROOTFS_DIR) -name "*.ko" -type f -printf 'striping %p\n' -exec $(CROSS_COMPILE_KERNEL)strip --strip-unneeded {} \;
-	${Q}find $(ROOTFS_DIR) -name "*.so*" -type f -printf 'striping %p\n' -exec $(CROSS_COMPILE_SDK)strip --strip-all {} \;
-	${Q}find $(ROOTFS_DIR) -executable -type f ! -name "*.sh" ! -path "*etc*" ! -path "*.ko" -printf 'striping %p\n' -exec $(CROSS_COMPILE_SDK)strip --strip-all {} 2>/dev/null \;
+	${Q}find $(ROOTFS_DIR) -name "*.ko" -type f -exec $(CROSS_COMPILE_KERNEL)strip --strip-unneeded {} \;
+	${Q}find $(ROOTFS_DIR) -name "*.so*" -type f -exec $(CROSS_COMPILE_SDK)strip --strip-all {} \;
+	${Q}find $(ROOTFS_DIR) -executable -type f ! -name "*.sh" ! -path "*etc*" ! -path "*.ko" -exec $(CROSS_COMPILE_SDK)strip --strip-all {} 2>/dev/null \;
 ifeq ($(STORAGE_TYPE),spinor)
 	${Q}mksquashfs $(ROOTFS_DIR) $(OUTPUT_DIR)/rawimages/rootfs.sqsh -root-owned -comp xz
 else
@@ -584,9 +584,10 @@ ifeq ($(MV_VENDOR), milkv)
 	${Q}rm -rf $(BR_OVERLAY_DIR)
 endif
 	# strip
-	${Q}find $(BR_ROOTFS_DIR) -name "*.ko" -type f -printf 'striping %p\n' -exec $(CROSS_COMPILE_KERNEL)strip --strip-unneeded {} \;
-	${Q}find $(BR_ROOTFS_DIR) -name "*.so*" -type f -printf 'striping %p\n' -exec $(CROSS_COMPILE_KERNEL)strip --strip-all {} \;
-	${Q}find $(BR_ROOTFS_DIR) -executable -type f ! -name "*.sh" ! -path "*etc*" ! -path "*.ko" -printf 'striping %p\n' -exec $(CROSS_COMPILE_SDK)strip --strip-all {} 2>/dev/null \;
+	${Q}printf "Striping *.ko *.so and executables\n"
+	${Q}find $(BR_ROOTFS_DIR) -name "*.ko" -type f -exec $(CROSS_COMPILE_KERNEL)strip --strip-unneeded {} \;
+	${Q}find $(BR_ROOTFS_DIR) -name "*.so*" -type f -exec $(CROSS_COMPILE_KERNEL)strip --strip-all {} \;
+	${Q}find $(BR_ROOTFS_DIR) -executable -type f ! -name "*.sh" ! -path "*etc*" ! -path "*.ko" -exec $(CROSS_COMPILE_SDK)strip --strip-all {} 2>/dev/null \;
 	${Q}mkdir -p $(BR_OVERLAY_DIR)
 	${Q}cp -arf $(BR_ROOTFS_DIR)/* $(BR_OVERLAY_DIR)
 
@@ -637,7 +638,7 @@ ifeq ($(CONFIG_BUILDROOT_FS),y)
 	${Q}rm $(OUTPUT_DIR)/br-rootfs -rf
 	${Q}ln -s $(OUTPUT_DIR)/br-rootfs $(OUTPUT_DIR)/fs
 	${Q}mkdir $(OUTPUT_DIR)/br-rootfs
-	${Q}tar xvf $(BR_DIR)/output/$(BR_BOARD)/images/rootfs.tar.xz -C $(OUTPUT_DIR)/br-rootfs
+	${Q}tar xf $(BR_DIR)/output/$(BR_BOARD)/images/rootfs.tar.xz -C $(OUTPUT_DIR)/br-rootfs
 else
 	${Q}ln -s $(OUTPUT_DIR)/rootfs $(OUTPUT_DIR)/fs
 endif

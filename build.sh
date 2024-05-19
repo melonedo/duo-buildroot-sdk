@@ -125,7 +125,7 @@ function milkv_build()
 	  rm -rf ${OUTPUT_DIR}/*
   fi
    
-  clean_all
+  # clean_all
   build_all
   if [ $? -eq 0 ]; then
     print_info "Build board ${MILKV_BOARD} success!"
@@ -261,9 +261,19 @@ get_toolchain
 
 export MILKV_BOARD="${MILKV_BOARD}"
 
+function do_build()
+{
+rm ./buildroot-2021.05/output/milkv-duo_musl_riscv64/images/rootfs.tar.xz
 prepare_env
 
 build_info
 
 milkv_build
 milkv_pack
+
+}
+
+# export VERBOSE=1
+# export KBUILD_VERBOSE=1
+# export SHELL='/usr/bin/bash -x'
+do_build

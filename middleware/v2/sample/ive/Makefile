@@ -6,6 +6,7 @@ include ../sample.mk
 
 SDIR = $(PWD)/src
 SRCS = $(wildcard $(SDIR)/*.c)
+SRCS = # Disable these
 INCS = -Iinclude -I$(MW_INC) -I$(KERNEL_INC)
 TARGET = $(SRCS:.c=)
 

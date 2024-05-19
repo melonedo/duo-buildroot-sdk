@@ -260,11 +260,11 @@ function build_middleware()
     make all || return "$?"
   popd
 
-  pushd "$MW_PATH"/sample
-    make all || return "$?"
-    find ./ -type f \( -iname "sample_*" ! -iname "*.*" \) -exec cp '{}' $SYSTEM_OUT_DIR/usr/bin \;
-    find ./ -type f \( -iname "sensor_test" \) -exec cp '{}' $SYSTEM_OUT_DIR/usr/bin \;
-  popd
+  # pushd "$MW_PATH"/sample
+  #   make all || return "$?"
+  #   # find ./ -type f \( -iname "sample_*" ! -iname "*.*" \) -exec cp '{}' $SYSTEM_OUT_DIR/usr/bin \;
+  #   find ./ -type f \( -iname "sensor_test" \) -exec cp '{}' $SYSTEM_OUT_DIR/usr/bin \;
+  # popd
 
   # copy mw lib
   cp -af "$MW_PATH"/lib/*.so*  "$SYSTEM_OUT_DIR"/lib
